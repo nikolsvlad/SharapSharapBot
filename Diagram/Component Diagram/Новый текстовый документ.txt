@@ -1,0 +1,26 @@
+@startuml
+!theme plain
+
+package "Telegram Bot" {
+  [sharapbot.py] as Bot
+  [llm.py] as LLM
+}
+
+actor Пользователь
+interface "Telegram API" as TG
+component "Ollama" as Ollama
+cloud "DeepSeek API\n(cloud)" as DeepSeek
+database "Supabase\n(PostgreSQL)" as DB
+component "Tavily Search" as Tavily
+component "Grafana Loki" as Loki
+
+Пользователь --> TG : сообщение
+TG --> Bot : polling
+Bot --> LLM : ask_model()
+LLM --> Ollama : HTTP POST /api/generate
+Ollama <--> DeepSeek : проксирует запрос
+LLM --> DB : запрашивает контекст
+Bot --> DB : upsert / save stats / save chat
+Bot --> Loki : логи
+LLM --> Tavily : поиск (если триггер)
+@enduml
