@@ -1,0 +1,9 @@
+PADIQUE_EXAMPLES = [
+    "пример 1",
+    "пример 2"
+]
+
+HISTORY_EXAMPLES = [
+"пример 1",
+"пример 2"    
+]
